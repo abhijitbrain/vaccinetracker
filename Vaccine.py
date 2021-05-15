@@ -1,8 +1,10 @@
 # Updated By Abhijit
 
+import pyttsx3
 from cowin_api import CoWinAPI
 
 #state_id = '26'
+speaker = pyttsx3.init()
 
 cowin = CoWinAPI()
 
@@ -35,6 +37,8 @@ for i in range(0,len(center)) :
             #print('\n')
         
 if counter == 0 :
+    speaker.say('18+ Sorry No Slots Available')
+    speaker.runAndWait()
     print("18+ Sorry No Slots Available")
 
 # for 45+ age
@@ -53,4 +57,6 @@ for i in range(0,len(center)) :
             #print('\n')
         
 if counter == 0 :
+    speaker.say('45+ Sorry No Slots Available')
+    speaker.runAndWait()
     print("45+ Sorry No Slots Available")
