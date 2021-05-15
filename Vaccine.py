@@ -1,6 +1,7 @@
 # Updated By Abhijit
 
 import pyttsx3
+import requests
 from cowin_api import CoWinAPI
 
 speaker = pyttsx3.init()
@@ -76,6 +77,10 @@ def vaccineCheck45():
 #s_details           =   sessions[0]     #7
 #available_capacity  =   s_details['available_capacity']
 
+#while True:
+data = requests.post("https://maker.ifttt.com/trigger/vaccine/with/key/cjnKf87f12oRWfsNuDNSF0")
+
+print(data)
 # For 18+ age
 vaccineCheck18()
 # for 45+ age
