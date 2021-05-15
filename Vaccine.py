@@ -3,6 +3,14 @@
 import pyttsx3
 import requests
 from cowin_api import CoWinAPI
+import time
+import RPi.GPIO as GPIO
+
+# Pins definitions
+btn_pin = 4
+# Set up pins
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(btn_pin, GPIO.IN)
 
 speaker = pyttsx3.init()
 cowin = CoWinAPI()
@@ -24,13 +32,14 @@ def vaccineCheck18():
                 print("Name : ", center[i]['name'])
                 print("Available slots : ", available)
                 print("Date : ", available_centers['centers'][i]['sessions'][j]['date'])
-                speaker.say('18+ Hey !')
-                speaker.say(available)
-                speaker.say('Slots available at')
-                speaker.say(center[i]['name'])
-                speaker.say('on')
-                speaker.say(available_centers['centers'][i]['sessions'][j]['date'])
-                speaker.runAndWait()
+                if GPIO.input(btn_pin):
+                    speaker.say('18+ Hey !')
+                    speaker.say(available)
+                    speaker.say('Slots available at')
+                    speaker.say(center[i]['name'])
+                    speaker.say('on')
+                    speaker.say(available_centers['centers'][i]['sessions'][j]['date'])
+                    speaker.runAndWait()
                 counter+=1
                 #print('\n')
         
@@ -39,8 +48,7 @@ def vaccineCheck18():
         speaker.runAndWait()
         print("18+ Sorry No Slots Available")
     else :
-        value1 = 18
-        data = requests.post("https://maker.ifttt.com/trigger/vAvailable/with/key/cjnKf87f12oRWfsNuDNSF0?&value1=45")
+        data = requests.post("https://maker.ifttt.com/trigger/vAvailable/with/key/cjnKf87f12oRWfsNuDNSF0?&value1=18")
 
 def vaccineCheck45():
     counter = 0
@@ -55,22 +63,21 @@ def vaccineCheck45():
                 print("Name : ", center[i]['name'])
                 print("Available slots : ", available)
                 print("Date : ", available_centers['centers'][i]['sessions'][j]['date'])
-                #speaker.say('45+ Hey !')
-                #speaker.say(available)
-                #speaker.say('Slots available at')
-                #speaker.say(center[i]['name'])
-                #speaker.say('on')
-                #speaker.say(available_centers['centers'][i]['sessions'][j]['date'])
-                #speaker.runAndWait()
+                if GPIO.input(btn_pin):
+                    speaker.say('45+ Hey !')
+                    speaker.say(available)
+                    speaker.say('Slots available at')
+                    speaker.say(center[i]['name'])
+                    speaker.say('on')
+                    speaker.say(available_centers['centers'][i]['sessions'][j]['date'])
+                    speaker.runAndWait()
                 counter+=1
-                #print('\n')
         
     if counter == 0 :
         speaker.say('45+ Sorry No Slots Available')
         speaker.runAndWait()
         print("45+ Sorry No Slots Available")
     else :
-        value1 = 45
         data = requests.post("https://maker.ifttt.com/trigger/vAvailable/with/key/cjnKf87f12oRWfsNuDNSF0?&value1=45")
 
 #state_id = '26'
@@ -83,10 +90,9 @@ def vaccineCheck45():
 #s_details           =   sessions[0]     #7
 #available_capacity  =   s_details['available_capacity']
 
-#while True:
+while True:
+        vaccineCheck18()
+        vaccineCheck45()
 
-# For 18+ age
-vaccineCheck18()
-# for 45+ age
-vaccineCheck45()
+
 
