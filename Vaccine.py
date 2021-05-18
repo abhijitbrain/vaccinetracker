@@ -21,6 +21,7 @@ date = '14-05-2021'     # Optional. Takes today's date by default
 def vaccineCheck18():
     cowin = CoWinAPI()
     counter = 0
+    totalAvailable = 0
     available_centers = cowin.get_availability_by_district(district_id, date, 18)
     center              =   available_centers["centers"]
     for i in range(0,len(center)) :
@@ -32,15 +33,18 @@ def vaccineCheck18():
                 print("Name : ", center[i]['name'])
                 print("Available slots : ", available)
                 print("Date : ", available_centers['centers'][i]['sessions'][j]['date'])
+                totalAvailable += available
                 counter+=1
         
     if counter == 0 :
         print("18+ Sorry No Slots Available")
     else :
-        data = requests.post("https://maker.ifttt.com/trigger/vAvailable/with/key/cjnKf87f12oRWfsNuDNSF0?&value1=18")
+        totalVacc = str(totalAvailable)
+        data = requests.post("https://maker.ifttt.com/trigger/vAvailable/with/key/cjnKf87f12oRWfsNuDNSF0?&value1=18&value2=" + totalVacc)
 
 def vaccineCheck45():
     counter = 0
+    totalAvailable = 0
     available_centers   =   cowin.get_availability_by_district(district_id, date, 45)
     center              =   available_centers["centers"]
     for i in range(0,len(center)) :
@@ -52,12 +56,14 @@ def vaccineCheck45():
                 print("Name : ", center[i]['name'])
                 print("Available slots : ", available)
                 print("Date : ", available_centers['centers'][i]['sessions'][j]['date'])
+                totalAvailable += available
                 counter+=1
         
     if counter == 0 :
         print("45+ Sorry No Slots Available")
     else :
-        data = requests.post("https://maker.ifttt.com/trigger/vAvailable/with/key/cjnKf87f12oRWfsNuDNSF0?&value1=45")
+        totalVacc = str(totalAvailable)
+        data = requests.post("https://maker.ifttt.com/trigger/vAvailable/with/key/cjnKf87f12oRWfsNuDNSF0?&value1=45&value2=" + totalVacc)
 
 def vaccineCheckV18():
     cowin = CoWinAPI()
@@ -131,7 +137,7 @@ while True:
         vaccineCheckV45()
     else:
         vaccineCheck18()
-        vaccineCheck45()
+        #vaccineCheck45()
         print('waiting for 10 min ......')
         time.sleep(600)
 
