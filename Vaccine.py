@@ -22,6 +22,8 @@ def vaccineCheck18():
     cowin = CoWinAPI()
     counter = 0
     totalAvailable = 0
+    centerName = "Null"
+    availDate = "Null"
     available_centers = cowin.get_availability_by_district(district_id, date, 18)
     center              =   available_centers["centers"]
     for i in range(0,len(center)) :
@@ -33,18 +35,22 @@ def vaccineCheck18():
                 print("Name : ", center[i]['name'])
                 print("Available slots : ", available)
                 print("Date : ", available_centers['centers'][i]['sessions'][j]['date'])
+                availDate = available_centers['centers'][i]['sessions'][j]['date']
                 totalAvailable += available
+                centerName = center[i]['name']
                 counter+=1
         
     if counter == 0 :
         print("18+ Sorry No Slots Available")
     else :
         totalVacc = str(totalAvailable)
-        data = requests.post("https://maker.ifttt.com/trigger/vAvailable/with/key/cjnKf87f12oRWfsNuDNSF0?&value1=18&value2=" + totalVacc)
+        data = requests.post("https://maker.ifttt.com/trigger/vAvailable/with/key/cjnKf87f12oRWfsNuDNSF0?&value1=" + availDate + "&value2=" + totalVacc + "&value3=" + centerName)
 
 def vaccineCheck45():
     counter = 0
     totalAvailable = 0
+    availDate = "Null"
+    centerName = "Null"
     available_centers   =   cowin.get_availability_by_district(district_id, date, 45)
     center              =   available_centers["centers"]
     for i in range(0,len(center)) :
@@ -56,14 +62,16 @@ def vaccineCheck45():
                 print("Name : ", center[i]['name'])
                 print("Available slots : ", available)
                 print("Date : ", available_centers['centers'][i]['sessions'][j]['date'])
+                availDate = available_centers['centers'][i]['sessions'][j]['date']
                 totalAvailable += available
+                centerName = center[i]['name']
                 counter+=1
         
     if counter == 0 :
         print("45+ Sorry No Slots Available")
     else :
         totalVacc = str(totalAvailable)
-        data = requests.post("https://maker.ifttt.com/trigger/vAvailable/with/key/cjnKf87f12oRWfsNuDNSF0?&value1=45&value2=" + totalVacc)
+        data = requests.post("https://maker.ifttt.com/trigger/vAvailable/with/key/cjnKf87f12oRWfsNuDNSF0?&value1=" + availDate + "&value2=" + totalVacc + "&value3=" + centerName)
 
 def vaccineCheckV18():
     cowin = CoWinAPI()
@@ -137,7 +145,7 @@ while True:
         vaccineCheckV45()
     else:
         vaccineCheck18()
-        #vaccineCheck45()
-        print('waiting for 10 min ......')
-        time.sleep(600)
+        vaccineCheck45()
+        print('waiting for 2 min ......')
+        time.sleep(120)
 
