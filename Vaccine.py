@@ -3,6 +3,7 @@
 import pyttsx3
 import requests
 from cowin_api import CoWinAPI
+from datetime import date
 import time
 import RPi.GPIO as GPIO
 
@@ -16,7 +17,8 @@ speaker = pyttsx3.init()
 cowin = CoWinAPI()
 
 district_id = '446'
-date = '14-05-2021'     # Optional. Takes today's date by default
+date = date.today().strftime('%d-%m-%Y') # '14-05-2021' Optional. Takes today's date by default
+print(date)
 
 def vaccineCheck18():
     cowin = CoWinAPI()
@@ -25,6 +27,7 @@ def vaccineCheck18():
     centerName = "Null"
     availDate = "Null"
     available_centers = cowin.get_availability_by_district(district_id, date, 18)
+    #print(available_centers)
     center              =   available_centers["centers"]
     for i in range(0,len(center)) :
         for j in range(0,len(center[i]['sessions'])):
