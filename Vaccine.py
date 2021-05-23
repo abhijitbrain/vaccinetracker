@@ -5,13 +5,13 @@ import requests
 from cowin_api import CoWinAPI
 from datetime import date
 import time
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 
 # Pins definitions
 btn_pin = 4
 # Set up pins
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(btn_pin, GPIO.IN)
+#GPIO.setmode(GPIO.BCM)
+#GPIO.setup(btn_pin, GPIO.IN)
 
 speaker = pyttsx3.init()
 cowin = CoWinAPI()
@@ -46,8 +46,9 @@ def vaccineCheck18():
     if counter == 0 :
         print("18+ Sorry No Slots Available")
     else :
-        totalVacc = str(totalAvailable)
-        data = requests.post("https://maker.ifttt.com/trigger/vAvailable/with/key/cjnKf87f12oRWfsNuDNSF0?&value1=" + availDate + "&value2=" + totalVacc + "&value3=" + centerName)
+        if totalAvailable > 1 :
+            totalVacc = str(totalAvailable)
+            data = requests.post("https://maker.ifttt.com/trigger/vAvailable/with/key/cjnKf87f12oRWfsNuDNSF0?&value1=" + availDate + "&value2=" + totalVacc + "&value3=" + centerName)
 
 def vaccineCheck45():
     counter = 0
@@ -142,13 +143,13 @@ def vaccineCheckV45():
 #available_capacity  =   s_details['available_capacity']
 
 while True:
-    if GPIO.input(btn_pin):
-        print('Button Pressed')
-        vaccineCheckV18()
-        vaccineCheckV45()
-    else:
+    #if GPIO.input(btn_pin):
+    #    print('Button Pressed')
+    #   vaccineCheckV18()
+    #    vaccineCheckV45()
+    #else:
         vaccineCheck18()
-        vaccineCheck45()
+    #    vaccineCheck45()
         print('waiting for 2 min ......')
         time.sleep(120)
 
